@@ -59,27 +59,27 @@ server <- function(id) {
 
     phylum_input <- dropdown$server("phylum_mod_id",
       category_children = "phylum",
-      list_children_per_parent = phylums_per_kingdom, kingdom_input
+      list_children_per_parent = phylums_per_kingdom, kingdom_input, column = "phylum"
     )
 
     class_input <- dropdown$server("class_mod_id",
       category_children = "class",
-      list_children_per_parent = classes_per_phylum, phylum_input
+      list_children_per_parent = classes_per_phylum, phylum_input, column = "class"
     )
 
     order_input <- dropdown$server("order_mod_id",
       category_children = "order",
-      list_children_per_parent = orders_per_class, class_input
+      list_children_per_parent = orders_per_class, class_input, column = "order"
     )
 
     family_input <- dropdown$server("family_mod_id",
       category_children = "family",
-      list_children_per_parent = families_per_order, order_input
+      list_children_per_parent = families_per_order, order_input, column = "family"
     )
 
     genus_input <- dropdown$server("genus_mod_id",
       category_children = "genus",
-      list_children_per_parent = genera_per_family, family_input
+      list_children_per_parent = genera_per_family, family_input, column = "genus"
     )
 
     infrageneric_input <- dropdown$server("infragenus_mod_id",
