@@ -1,6 +1,6 @@
 box::use(
   shiny[tags, NS, selectizeInput, updateSelectizeInput, moduleServer, observeEvent, reactive, req, reactiveVal],
-  dplyr[pull]
+  dplyr[pull, filter]
 )
 
 box::use(
@@ -27,10 +27,10 @@ server <- function(id, category_children, list_children_per_parent, input_ = NUL
     rv_df_childrens <- reactiveVal(data.frame())
 
     observeEvent(input_(), {
+      childrens <- NULL
       req(input_() != "")
-
+      req(!is.null(list_children_per_parent[[input_()]]))
       childrens <- list_children_per_parent[[input_()]] |> pull(column)
-      rv_df_childrens(list_children_per_parent[[input_()]])
 
       updateSelectizeInput(session, category_children_id,
         category_children_name,
@@ -42,7 +42,12 @@ server <- function(id, category_children, list_children_per_parent, input_ = NUL
     if (return_ == "single") {
       return(reactive(input[[category_children_id]]))
     } else {
-      return(reactive(rv_df_childrens()))
+      return(
+        reactive({
+          req(input[[category_children_id]] != "")
+          list_children_per_parent[[input_()]] |> filter(.data[[column]] == input[[category_children_id]])
+        })
+      )
     }
   })
 }
