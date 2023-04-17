@@ -1,0 +1,15 @@
+.background {
+  background-color: #FFF0EB;
+}
+
+.main {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 80%;
+  min-width: 1200px;  
+}
+
+.shiny-split-layout > div {
+  overflow: visible;
+}
