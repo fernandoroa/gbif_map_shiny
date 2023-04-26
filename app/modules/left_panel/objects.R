@@ -1,4 +1,7 @@
 #' @export
+kingdom_data <- readRDS("rds/kingdom_data.rds")
+
+#' @export
 phylums_per_kingdom <- readRDS("rds/phylums_per_kingdom.rds")
 
 #' @export
@@ -14,7 +17,7 @@ families_per_order <- readRDS("rds/families_per_order.rds")
 genera_per_family <- readRDS("rds/genera_per_family.rds")
 
 #' @export
-infragenus_per_genus <- readRDS("rds/infragenus_per_genus.rds")
+infragenus_per_genus <- readRDS("rds/infrage_per_genus.rds")
 
 # infragenus_ranks <-  c("species", "variety", "subspecies", "form")
 manual_ranks <- c("kingdom", "phylum", "class", "order", "family", "genus")

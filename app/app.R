@@ -1,5 +1,8 @@
 box::use(
   shiny[...],
+)
+
+box::use(
   ./modules/left_panel,
   ./modules/second_module
 )
@@ -12,9 +15,13 @@ ui <- function(req) {
     ),
     wellPanel(
       class = "main background", id = "central_panel",
-      splitLayout(
-        left_panel$ui("first"),
-        second_module$ui("second")
+      div(class = "wrapper",
+        div(class = "left_panel",
+          left_panel$ui("first"),
+        ),
+        div(class = "right_panel",
+          second_module$ui("second")
+        )
       )
     )
   )
