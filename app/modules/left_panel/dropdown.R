@@ -9,13 +9,13 @@ box::use(
 )
 
 #' @export
-ui <- function(id, category, choices = NULL, selected = NULL) {
+ui <- function(id, category) {
   ns <- NS(id)
   category_id <- paste0(category, "_id")
   category_name <- capitalize_first(category)
-  tags$section(selectizeInput(ns(category_id), category_name, choices,
-    selected = selected
-  ), options = list(dropdownParent = I("body")))
+  selectizeInput(ns(category_id), category_name, choices = NULL,
+    selected = NULL
+  )
 }
 
 #' @export
@@ -39,8 +39,7 @@ server <- function(id, category_children, list_children_per_parent, input_ = NUL
       req(rv_selec() != "")
 
       req(!is.null(list_children_per_parent[[rv_selec()]]))
-
-      childrens <- list_children_per_parent[[rv_selec()]] |> pull(column)
+      childrens <- list_children_per_parent[[rv_selec()]] |> pull(column) |> unique()
 
       updateSelectizeInput(session,
         category_children_id,

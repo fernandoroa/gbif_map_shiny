@@ -1,5 +1,6 @@
 box::use(
   shiny[...],
+  shinyjs[useShinyjs]
 )
 
 box::use(
@@ -9,6 +10,7 @@ box::use(
 
 ui <- function(req) {
   fluidPage(
+    useShinyjs(),
     class = "container",
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "styles/main.css")
