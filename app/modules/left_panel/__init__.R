@@ -26,12 +26,12 @@ ui <- function(id) {
         kingdom = selectizeInput(ns("kingdom_id"), "Kingdom", names(phylums_per_kingdom),
           selected = "Plantae"
         ),
-        phylum = dropdown$ui(ns("phylum_mod_id"), category = "phylum", choices = NULL, selected = NULL),
-        class = dropdown$ui(ns("class_mod_id"), category = "class", choices = NULL, selected = NULL),
-        order = dropdown$ui(ns("order_mod_id"), category = "order", choices = NULL, selected = NULL),
-        family = dropdown$ui(ns("family_mod_id"), category = "family", choices = NULL, selected = NULL),
-        genus = dropdown$ui(ns("genus_mod_id"), category = "genus", choices = NULL, selected = NULL),
-        infrageneric = dropdown$ui(ns("infragenus_mod_id"), category = "infrageneric", choices = NULL, selected = NULL),
+        phylum = dropdown$ui(ns("phylum_mod_id"), category = "phylum"),
+        class = dropdown$ui(ns("class_mod_id"), category = "class"),
+        order = dropdown$ui(ns("order_mod_id"), category = "order"),
+        family = dropdown$ui(ns("family_mod_id"), category = "family"),
+        genus = dropdown$ui(ns("genus_mod_id"), category = "genus"),
+        infrageneric = dropdown$ui(ns("infragenus_mod_id"), category = "infrageneric"),
         selection = htmlOutput(ns("output_1")),
         manual_rank = selectizeInput(ns("manual_rank_id"), "Rank Selection", ranks,
           selected = "infrageneric"
