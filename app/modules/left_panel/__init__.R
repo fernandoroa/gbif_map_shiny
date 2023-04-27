@@ -1,11 +1,13 @@
 box::use(
   shiny[...],
   imola[...],
-  dplyr[pull, filter, `%>%`]
+  dplyr[pull, filter, `%>%`],
+  stats[setNames]
 )
 box::use(
   ./objects[...],
-  ./dropdown
+  ./dropdown,
+  ./resolve
 )
 #' @export
 ui <- function(id) {
@@ -16,12 +18,12 @@ ui <- function(id) {
       solidHeader = TRUE, status = "primary",
       gridPanel(
         areas = c(
-          "kingdom phylum class",
-          "order family genus",
-          "infrageneric infrageneric manual_rank",
-          "selection selection selection "
+          "kingdom kingdom phylum phylum class class",
+          "order order family family genus genus",
+          "infrageneric infrageneric infrageneric infrageneric manual_rank manual_rank",
+          "resolve resolve resolve selection selection selection"
         ),
-        columns = "1fr 1fr 1fr",
+        columns = "1fr 1fr 1fr 1fr 1fr 1fr",
         gap = "1em",
         kingdom = selectizeInput(ns("kingdom_id"), "Kingdom", names(phylums_per_kingdom),
           selected = "Plantae"
@@ -32,10 +34,11 @@ ui <- function(id) {
         family = dropdown$ui(ns("family_mod_id"), category = "family"),
         genus = dropdown$ui(ns("genus_mod_id"), category = "genus"),
         infrageneric = dropdown$ui(ns("infragenus_mod_id"), category = "infrageneric"),
-        selection = htmlOutput(ns("output_1")),
+        selection = htmlOutput(ns("selection_box")),
         manual_rank = selectizeInput(ns("manual_rank_id"), "Rank Selection", ranks,
           selected = "infrageneric"
         ),
+        resolve = resolve$ui(ns("resolve_mod_id"))
       )
     )
   )
@@ -79,6 +82,10 @@ server <- function(id) {
       category_children = "infrageneric",
       list_children_per_parent = infragenus_per_genus, genus_input, parent_column = "genus"
     )
+
+    list_inputs <- lapply(ls(pattern = "_input$"), function(x) get(x, envir = environment())) |> setNames(ls(pattern = "_input"))
+
+    vars_resolve_mod <- resolve$server("resolve_mod_id", input_manual_rank_id, list_inputs)
 
     output$selection_box <- renderUI({
       req(input$manual_rank_id)
