@@ -46,35 +46,9 @@ server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    output$output_1 <- renderUI({
-      rank_selected <- paste0(input$manual_rank_id, "_input")
-      if (rank_selected == "kingdom_input") {
-        names <- paste(get(paste0(input$manual_rank_id, "_input"))())
-        rank <- "Rank: Kingdom"
-        taxonID <- kingdom_data |> filter(scientificName %in% names) |> pull(taxonID) %>% {paste("taxonID:", .)}
-      } else {
-        names <- get(paste0(input$manual_rank_id, "_input"))()$scientificName
-        names <- paste0(names, collapse = ", ")
-        rank <- paste0("Rank:",
-          paste0(
-            get(paste0(input$manual_rank_id, "_input"))()$taxonRank |> unique(), collapse = ", "
-          )
-        )
-        taxonID <- paste0(
-          get(paste0(input$manual_rank_id, "_input"))()$taxonID |> unique(), collapse = ", "
-        ) %>% {paste("taxonID:", .)}
-      }
-      taxon_string <- ifelse(grepl(",", names), "Taxa", "Taxon")
-      HTML(paste(
-            paste(taxon_string, "selected:", names),
-            rank,
-            taxonID,
-            sep = "<br>"
-          )
-      )
-    })
-
     kingdom_input <- reactive(input$kingdom_id)
+
+    input_manual_rank_id <- reactive(input$manual_rank_id)
 
     phylum_input <- dropdown$server("phylum_mod_id",
       category_children = "phylum",
@@ -105,6 +79,19 @@ server <- function(id) {
       category_children = "infrageneric",
       list_children_per_parent = infragenus_per_genus, genus_input, parent_column = "genus"
     )
+
+    output$selection_box <- renderUI({
+      req(input$manual_rank_id)
+      div(class = "text_box",
+        HTML(paste(
+              paste("Taxon selected:", vars_resolve_mod$synonym()),
+              paste("Rank:", vars_resolve_mod$rank_string()),
+              paste("TaxonID:", vars_resolve_mod$taxonID()),
+              sep = "<br>"
+            )
+        )
+      )
+    })
 
     return(reactive(input$kingdom_id))
   })

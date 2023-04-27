@@ -12,6 +12,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-areas: "left_panel_area right_panel_area";
+  column-gap: 20px;
 }
 
 .wrapper .left_panel {
@@ -20,4 +21,11 @@
 
 .wrapper .right_panel {
   grid-area: right_panel_area;
+}
+
+.text_box {
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid #cccccc;
+  padding: 6px 12px
 }
