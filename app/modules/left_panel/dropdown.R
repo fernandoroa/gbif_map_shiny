@@ -39,8 +39,7 @@ server <- function(id, category_children, list_children_per_parent, input_ = NUL
       req(rv_selec() != "")
 
       req(!is.null(list_children_per_parent[[rv_selec()]]))
-
-      childrens <- list_children_per_parent[[rv_selec()]] |> pull(column)
+      childrens <- list_children_per_parent[[rv_selec()]] |> pull(column) |> unique()
 
       updateSelectizeInput(session,
         category_children_id,
