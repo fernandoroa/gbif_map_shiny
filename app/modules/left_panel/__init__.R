@@ -23,9 +23,9 @@ ui <- function(id) {
         ),
         columns = "1fr 1fr 1fr",
         gap = "1em",
-        kingdom = tags$section(selectizeInput(ns("kingdom_id"), "Kingdom", names(phylums_per_kingdom),
+        kingdom = selectizeInput(ns("kingdom_id"), "Kingdom", names(phylums_per_kingdom),
           selected = "Plantae"
-        ), options = list(dropdownParent = I("body"))),
+        ),
         phylum = dropdown$ui(ns("phylum_mod_id"), category = "phylum", choices = NULL, selected = NULL),
         class = dropdown$ui(ns("class_mod_id"), category = "class", choices = NULL, selected = NULL),
         order = dropdown$ui(ns("order_mod_id"), category = "order", choices = NULL, selected = NULL),
@@ -33,9 +33,9 @@ ui <- function(id) {
         genus = dropdown$ui(ns("genus_mod_id"), category = "genus", choices = NULL, selected = NULL),
         infrageneric = dropdown$ui(ns("infragenus_mod_id"), category = "infrageneric", choices = NULL, selected = NULL),
         selection = htmlOutput(ns("output_1")),
-        manual_rank = selectizeInput(ns("manual_rank_id"), "Manual Rank Selection", ranks,
+        manual_rank = selectizeInput(ns("manual_rank_id"), "Rank Selection", ranks,
           selected = "infrageneric"
-        ), options = list(dropdownParent = I("body"))
+        ),
       )
     )
   )
