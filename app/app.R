@@ -5,7 +5,7 @@ box::use(
 
 box::use(
   ./modules/left_panel,
-  ./modules/second_module
+  ./modules/right_panel
 )
 
 ui <- function(req) {
@@ -22,7 +22,7 @@ ui <- function(req) {
           left_panel$ui("first"),
         ),
         div(class = "right_panel",
-          second_module$ui("second")
+          right_panel$ui("second")
         )
       )
     )
@@ -31,7 +31,7 @@ ui <- function(req) {
 
 server <- function(input, output, session) {
   first_vars <- left_panel$server("first")
-  second_module$server("second", first_vars)
+  right_panel$server("second", first_vars)
 }
 
 shinyApp(ui, server)
