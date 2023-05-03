@@ -74,6 +74,9 @@ server <- function(
           selected <- "phylum"
         } else {
           selected <- session$userData$input_manual_rank_id()()
+          if (!selected %in% ranks_filtered) {
+            selected <- "phylum"
+          }
         }
         updateSelectizeInput(session,
           "manual_rank_id",
