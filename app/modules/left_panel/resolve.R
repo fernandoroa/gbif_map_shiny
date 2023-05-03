@@ -4,11 +4,14 @@ box::use(
     selectizeInput,
     updateSelectizeInput,
     moduleServer,
-    observe,
+    observeEvent,
     reactive,
     req,
     reactiveVal,
-    div
+    div,
+    debounce,
+    validate,
+    need
   ],
   dplyr[pull, filter],
   glue[glue],
@@ -23,62 +26,106 @@ box::use(
 ui <- function(id) {
   ns <- NS(id)
   hidden(
-    div(id = ns("synonym_container_id"),
-      selectizeInput(ns("synonym"), "Select Synonym", choices = NULL,
-        selected = NULL
+    div(
+      id = ns("synonym_container_id"),
+      selectizeInput(ns("synonym"), "Select Synonym",
+        choices = NULL,
+        selected = NULL,
+        options = list(create = TRUE)
       )
     )
   )
 }
 
 #' @export
-server <- function(id, input_manual_rank_id, list_inputs) {
+server <- function(
+    id,
+    input_manual_rank_id,
+    infrageneric_input,
+    genus_input,
+    family_input,
+    order_input,
+    class_input,
+    phylum_input,
+    kingdom_input) {
   moduleServer(id, function(input, output, session) {
-
     rv_rank_selected <- reactiveVal("kingdom_input")
 
-    observe({
+    observeEvent(
+      c(
+        input_manual_rank_id(),
+        infrageneric_input(),
+        genus_input(),
+        family_input(),
+        order_input(),
+        class_input(),
+        phylum_input(),
+        kingdom_input()
+      ),
+      {
+        rank_selected <- paste0(input_manual_rank_id(), "_input")
+        rv_rank_selected(rank_selected)
 
-      rank_selected <- paste0(input_manual_rank_id(), "_input")
-      rv_rank_selected(rank_selected)
+        if (rank_selected == "kingdom_input") {
+          names_ <- get(rank_selected)()
+        } else {
+          names_ <- get(rank_selected)()$scientificName
+        }
 
-      if (rank_selected == "kingdom_input") {
-        names <- list_inputs[["kingdom_input"]]()
-      } else {
-        names <- list_inputs[[rank_selected]]()$scientificName
+        toggle("synonym_container_id", condition = length(names_) > 1)
+
+        updateSelectizeInput(session,
+          "synonym",
+          glue("Synonym ({length(names_)})"),
+          names_,
+          selected = names_[1],
+          server = TRUE
+        )
       }
+    )
 
-      toggle("synonym_container_id", condition = length(names) > 1)
-
-      updateSelectizeInput(session,
-        "synonym",
-        glue("Synonym ({length(names)})"),
-        names,
-        selected = names[1]
-      )
-
+    input_synonym <- reactive({
+      input[["synonym"]]
     })
+
+    input_synonym_d <- input_synonym |> debounce(1000)
 
     return(
       list(
-        synonym = reactive(input[["synonym"]]),
+        synonym = reactive(input_synonym_d()),
         taxonID = reactive({
-          req(input[["synonym"]])
           if (rv_rank_selected() == "kingdom_input") {
-            kingdom_data |> filter(scientificName %in% input[["synonym"]]) |> pull(taxonID)
+            kingdom_data |>
+              filter(scientificName %in% input_synonym_d()) |>
+              pull(taxonID)
           } else {
-            list_inputs[[rv_rank_selected()]]() |>
-              filter(scientificName %in% input[["synonym"]]) |>
+            validate(
+              need(
+                try(get(rv_rank_selected())() |> filter(scientificName %in% input_synonym_d()) |> NROW() > 0),
+                FALSE
+              )
+            )
+            get(rv_rank_selected())() |>
+              filter(scientificName %in% input_synonym_d()) |>
               pull(taxonID)
           }
         }),
         rank_string = reactive({
-          req(input[["synonym"]])
+          req(input_synonym_d())
+
           if (rv_rank_selected() == "kingdom_input") {
-            kingdom_data |> filter(scientificName %in% input[["synonym"]]) |> pull(taxonRank)
+            kingdom_data |>
+              filter(scientificName %in% input_synonym_d()) |>
+              pull(taxonRank)
           } else {
-            list_inputs[[rv_rank_selected()]]() |>
-              filter(scientificName %in% input[["synonym"]]) |>
+            validate(
+              need(
+                try(get(rv_rank_selected())() |> filter(scientificName %in% input_synonym_d()) |> NROW() > 0),
+                FALSE
+              )
+            )
+            get(rv_rank_selected())() |>
+              filter(scientificName %in% input_synonym_d()) |>
               pull(taxonRank)
           }
         })
