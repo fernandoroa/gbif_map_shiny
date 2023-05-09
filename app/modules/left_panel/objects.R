@@ -25,3 +25,6 @@ manual_ranks <- c("kingdom", "phylum", "class", "order", "family", "genus")
 
 #' @export
 ranks <- c(manual_ranks, "infrageneric")
+
+#' @export
+ranks_except_k <- setdiff(ranks, "kingdom")

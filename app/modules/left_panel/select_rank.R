@@ -75,7 +75,10 @@ server <- function(
         } else {
           selected <- session$userData$input_manual_rank_id()()
           if (!selected %in% ranks_filtered) {
-            selected <- "phylum"
+            selected <- intersect(ranks_except_k, ranks_filtered)[1]
+            if (is.na(selected)) {
+              selected <- "kingdom"
+            }
           }
         }
         updateSelectizeInput(session,

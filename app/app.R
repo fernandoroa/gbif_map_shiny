@@ -13,15 +13,16 @@ ui <- function(req) {
     useShinyjs(),
     class = "container",
     tags$head(
-      tags$link(rel = "stylesheet", type = "text/css", href = "styles/main.css")
+      tags$link(rel = "stylesheet", type = "text/css", href = "styles/main.css"),
+      tags$link(rel = "stylesheet", type = "text/css",
+        href = "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css")
     ),
-    wellPanel(
-      class = "main background", id = "central_panel",
+    div(class = "main",
       div(class = "wrapper",
-        div(class = "left_panel",
+        tags$section(class = "left_panel",
           left_panel$ui("first"),
         ),
-        div(class = "right_panel",
+        tags$section(class = "right_panel",
           right_panel$ui("second")
         )
       )
