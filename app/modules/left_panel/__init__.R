@@ -14,32 +14,29 @@ box::use(
 #' @export
 ui <- function(id) {
   ns <- NS(id)
-  tagList(
-    wellPanel(
-      title = "Select a taxon", collapsible = FALSE, class = "left_background",
-      solidHeader = TRUE, status = "primary",
-      gridPanel(
-        areas = c(
-          "kingdom kingdom phylum phylum class class",
-          "order order family family genus genus",
-          "infrageneric infrageneric infrageneric infrageneric manual_rank manual_rank",
-          "resolve resolve resolve selection selection selection"
-        ),
-        columns = "1fr 1fr 1fr 1fr 1fr 1fr",
-        gap = "1em",
-        kingdom = selectizeInput(ns("kingdom_id"), "Kingdom", names(phylums_per_kingdom),
-          selected = "Plantae"
-        ),
-        phylum = dropdown$ui(ns("phylum_mod_id"), category = "phylum"),
-        class = dropdown$ui(ns("class_mod_id"), category = "class"),
-        order = dropdown$ui(ns("order_mod_id"), category = "order"),
-        family = dropdown$ui(ns("family_mod_id"), category = "family"),
-        genus = dropdown$ui(ns("genus_mod_id"), category = "genus"),
-        infrageneric = dropdown$ui(ns("infragenus_mod_id"), category = "infrageneric"),
-        selection = htmlOutput(ns("selection_box")),
-        manual_rank = select_rank$ui(ns("select_rank_mod_id")),
-        resolve = resolve$ui(ns("resolve_mod_id"))
-      )
+  wellPanel(
+    class = "left_background",
+    gridPanel(
+      areas = c(
+        "kingdom kingdom phylum phylum class class",
+        "order order family family genus genus",
+        "infrageneric infrageneric infrageneric infrageneric manual_rank manual_rank",
+        "resolve resolve resolve selection selection selection"
+      ),
+      columns = "1fr 1fr 1fr 1fr 1fr 1fr",
+      gap = "0em 1em",
+      kingdom = selectizeInput(ns("kingdom_id"), "Kingdom", names(phylums_per_kingdom),
+        selected = "Plantae"
+      ),
+      phylum = dropdown$ui(ns("phylum_mod_id"), category = "phylum"),
+      class = dropdown$ui(ns("class_mod_id"), category = "class"),
+      order = dropdown$ui(ns("order_mod_id"), category = "order"),
+      family = dropdown$ui(ns("family_mod_id"), category = "family"),
+      genus = dropdown$ui(ns("genus_mod_id"), category = "genus"),
+      infrageneric = dropdown$ui(ns("infragenus_mod_id"), category = "infrageneric"),
+      selection = htmlOutput(ns("selection_box")),
+      manual_rank = select_rank$ui(ns("select_rank_mod_id")),
+      resolve = resolve$ui(ns("resolve_mod_id"))
     )
   )
 }
