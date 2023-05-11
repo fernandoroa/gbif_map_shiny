@@ -2,7 +2,8 @@ box::use(
   shiny[...],
   leaflet[leafletOutput, renderLeaflet],
   shinyjs[onclick, runjs],
-  glue[glue]
+  glue[glue],
+  dplyr[filter, pull]
 )
 
 box::use(
@@ -58,6 +59,32 @@ server <- function(id, left_vars) {
       )
       make_map_from_selection(selected_taxon)
     })
+
+    output$multimedia_id <- renderUI({
+      selected_taxon <- left_vars()$taxonID()
+      validate(
+        need(
+          try(length(selected_taxon) > 0),
+          FALSE
+        )
+      )
+
+      height <- session$clientData$`output_second-map1_height`
+
+      image_files <- multimedia_filtered |> filter(taxonID %in% selected_taxon) |> pull(identifier)
+      img_found <- ""
+      if (length(image_files) > 0) {
+        image_file <- image_files |> sample(1)
+      } else {
+        image_file <- "no-image-icon-23494.png"
+        img_found <- "No "
+      }
+
+      div(
+        tags$img(src = image_file, height = height, alt = glue("{img_found}image for taxon {selected_taxon}"))
+      )
+    })
+
     onclick("vertical_right_bar_id",
       runjs(
         paste0(
@@ -107,8 +134,6 @@ server <- function(id, left_vars) {
       }
     })
 
-    output$map2 <- renderPlot({
-      plot(1:10)
-    })
+
   })
 }
