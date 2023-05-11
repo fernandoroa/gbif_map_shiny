@@ -112,7 +112,7 @@ server <- function(id, left_vars) {
     observeEvent(input$selected_show,{
       if (input$selected_show == "map") {
         removeUI(
-          selector = "#second-map2"
+          selector = glue("#{ns(\"multimedia_id\")}")
         )
         insertUI(
           selector = ".map_container",
@@ -121,15 +121,15 @@ server <- function(id, left_vars) {
         )
       } else {
         removeUI(
-          selector = "#second-map1"
+          selector = glue("#{ns(\"map1\")}")
         )
         removeUI(
-          selector = "#second-map1b"
+          selector = glue("#{ns(\"map1b\")}")
         )
         insertUI(
           selector = ".map_container",
           where = "afterBegin",
-          ui = plotOutput(ns("map2"))
+          ui = uiOutput(ns("multimedia_id"))
         )
       }
     })
