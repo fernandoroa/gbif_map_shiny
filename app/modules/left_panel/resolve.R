@@ -19,7 +19,7 @@ box::use(
 )
 
 box::use(
-  ./objects[...],
+  ../../objects/objects[...],
 )
 
 #' @export

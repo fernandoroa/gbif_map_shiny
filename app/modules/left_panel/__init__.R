@@ -5,7 +5,7 @@ box::use(
   stats[setNames]
 )
 box::use(
-  ./objects[...],
+  ../../objects/objects[...],
   ./dropdown,
   ./resolve,
   ./select_rank

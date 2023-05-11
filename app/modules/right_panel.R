@@ -8,6 +8,7 @@ box::use(
 box::use(
   ./left_panel[...],
   ../logic/helper[...],
+  ../objects/objects[...],
 )
 
 #' @export
