@@ -28,3 +28,6 @@ ranks <- c(manual_ranks, "infrageneric")
 
 #' @export
 ranks_except_k <- setdiff(ranks, "kingdom")
+
+#' @export
+multimedia_filtered <- readRDS("rds/multimedia_filtered.rds")
