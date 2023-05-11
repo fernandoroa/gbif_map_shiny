@@ -48,6 +48,16 @@ server <- function(id, left_vars) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
+    output$map1b <- output$map1 <- renderLeaflet({
+      selected_taxon <- left_vars()$taxonID()
+      validate(
+        need(
+          try(length(selected_taxon) > 0),
+          FALSE
+        )
+      )
+      make_map_from_selection(selected_taxon)
+    })
     onclick("vertical_right_bar_id",
       runjs(
         paste0(
@@ -71,17 +81,6 @@ server <- function(id, left_vars) {
       )),
       asis = TRUE
     )
-
-    output$map1b <- output$map1 <- renderLeaflet({
-      selected_taxon <- left_vars()$taxonID()
-      validate(
-        need(
-          try(length(selected_taxon) > 0),
-          FALSE
-        )
-      )
-      make_map_from_selection(selected_taxon)
-    })
 
     observeEvent(input$selected_show,{
       if (input$selected_show == "map") {
