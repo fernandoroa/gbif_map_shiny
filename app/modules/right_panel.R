@@ -69,8 +69,6 @@ server <- function(id, left_vars) {
         )
       )
 
-      height <- session$clientData$`output_second-map1_height`
-
       image_files <- multimedia_filtered |> filter(taxonID %in% selected_taxon) |> pull(identifier)
       img_found <- ""
       if (length(image_files) > 0) {
@@ -79,9 +77,13 @@ server <- function(id, left_vars) {
         image_file <- "no-image-icon-23494.png"
         img_found <- "No "
       }
-
-      div(
-        tags$img(src = image_file, height = height, alt = glue("{img_found}image for taxon {selected_taxon}"))
+      tagList(
+        div(`data-title` = image_file, id = "img_container",
+          tags$img(
+            src = image_file, alt = glue("{img_found}image for taxon {selected_taxon}")
+          )
+        ),
+        tags$script(type = "text/javascript", "tooltip_toggle()")
       )
     })
 

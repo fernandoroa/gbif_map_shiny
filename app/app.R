@@ -13,6 +13,7 @@ ui <- function(req) {
     useShinyjs(),
     class = "container",
     tags$head(
+      tags$script(type="text/javascript", src = "tooltip.js"),
       tags$link(rel = "stylesheet", type = "text/css", href = "styles/main.css"),
       tags$link(rel = "stylesheet", type = "text/css",
         href = "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css")
